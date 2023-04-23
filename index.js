@@ -320,7 +320,7 @@ app.get('/api/level5', async (req, res) => {
 
 });
 
-app.get('/hello', (req, res) => {
+app.get('/', (req, res) => {
     console.log("Hello")
     res.send("Hello World")
 })
