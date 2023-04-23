@@ -103,7 +103,6 @@ app.post('/api/updateUser', async (req, res) => {
         const decoded = jwt.verify(token, process.env.JSON_TOKEN)
         const email = decoded.email
         const user = await User.updateOne({ email: email }, { $set: { gameWon: decoded.gameWon+1 } })
-
         return res.json({ status: 'ok' })
     } catch (error) {
         console.log(error)
@@ -135,8 +134,6 @@ app.post('/api/addlevel1', async (req, res) => {
     const token = req.headers['x-access-token']
     const decoded = jwt.verify(token, process.env.JSON_TOKEN)
     const email = decoded.email
-    // console.log(req.body)
-    // console.log(email)
     if (email === 'admin@admin.com') {
         try {
             await level1.create({
