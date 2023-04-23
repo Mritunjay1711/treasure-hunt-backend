@@ -87,11 +87,11 @@ app.get('/api/users', async (req, res) => {
             return res.json(user)
         } catch (error) {
             console.log(error)
-            res.json({ status: 'error', error: 'invalid token' })
+            res.json({ status: 'error'})
         }
     }
     else {
-        res.json({ status: 'error', error: 'invalid access' })
+        res.json({ status: 'error'})
     }
 });
 
