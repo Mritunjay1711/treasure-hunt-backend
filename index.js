@@ -16,7 +16,15 @@ app.use(cors())
 app.use(express.json())
 
 // mongoose.connect('mongodb://127.0.0.1:27017/treasure-hunt');
-mongoose.connect(process.env.MONGO_URI);
+const connectDB = async () => {
+    try {
+        const conn = await mongoose.connect(process.env.MONGO_URI);
+        console.log(`MongoDB Connected: ${conn.connection.host}`);
+    } catch (error) {
+        console.log(error);
+        process.exit(1);
+    }
+}
 
 
 app.post('/api/register', async (req, res) => {
@@ -46,7 +54,7 @@ app.post('/api/login', async (req, res) => {
             name: user.name,
             email: user.email,
         }, process.env.JSON_TOKEN)
-        return res.json({ status: 'ok', user: token, name:user.name })
+        return res.json({ status: 'ok', user: token, name: user.name })
     } else {
         return res.json({ status: 'error', user: false })
     }
@@ -57,9 +65,9 @@ app.post('/api/deleteuser', async (req, res) => {
         email: req.body.email,
     })
     if (user.deletedCount === 1) {
-        return res.json({status:'ok'})
+        return res.json({ status: 'ok' })
     } else {
-        return res.json({status:'error'})
+        return res.json({ status: 'error' })
     }
 })
 
@@ -325,6 +333,8 @@ app.get('/', (req, res) => {
     res.send("Hello World")
 })
 
-app.listen(port, () => {
-    console.log(`Server started on ${port}`)
+connectDB().then(() => {
+    app.listen(PORT, () => {
+        console.log("listening for requests");
+    })
 })
