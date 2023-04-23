@@ -34,6 +34,7 @@ app.post('/api/register', async (req, res) => {
             name: req.body.name,
             email: req.body.email,
             password: req.body.password,
+            gameWon: 0,
         })
         res.json({ status: 'ok' })
     } catch (err) {
@@ -53,6 +54,7 @@ app.post('/api/login', async (req, res) => {
         const token = jwt.sign({
             name: user.name,
             email: user.email,
+            gameWon: user.gameWon,
         }, process.env.JSON_TOKEN)
         return res.json({ status: 'ok', user: token, name: user.name })
     } else {
@@ -81,7 +83,7 @@ app.get('/api/users', async (req, res) => {
         try {
 
             const user = await User.find()
-            // console.log(user)
+            console.log(user)
             return res.json(user)
         } catch (error) {
             console.log(error)
@@ -93,14 +95,14 @@ app.get('/api/users', async (req, res) => {
     }
 });
 
-app.post('/api/quote', async (req, res) => {
+app.post('/api/updateUser', async (req, res) => {
 
     const token = req.headers['x-access-token']
 
     try {
         const decoded = jwt.verify(token, process.env.JSON_TOKEN)
         const email = decoded.email
-        const user = await User.updateOne({ email: email }, { $set: { quote: req.body.quote } })
+        const user = await User.updateOne({ email: email }, { $set: { gameWon: decoded.gameWon+1 } })
 
         return res.json({ status: 'ok' })
     } catch (error) {
