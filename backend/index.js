@@ -10,7 +10,6 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
 const port = process.env.PORT || 1337
-
 require('dotenv').config()
 
 app.use(cors())
